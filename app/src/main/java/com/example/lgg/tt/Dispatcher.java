@@ -1,9 +1,11 @@
 package com.example.lgg.tt;
 
 
+import java.util.ArrayDeque;
 import java.util.concurrent.ExecutorService;
 
 import androidx.annotation.Nullable;
+import okhttp3.RealCall;
 
 // 调度器
 public final class Dispatcher {
@@ -16,5 +18,14 @@ public final class Dispatcher {
     //线程池，懒加载
     private @Nullable
     ExecutorService executorService;
+
+    /** Ready async calls in the order they'll be run. */
+    private final Deque<RealCall.AsyncCall> readyAsyncCalls = new ArrayDeque<>();
+
+    /** Running asynchronous calls. Includes canceled calls that haven't finished yet. */
+    private final Deque<RealCall.AsyncCall> runningAsyncCalls = new ArrayDeque<>();
+
+    /** Running synchronous calls. Includes canceled calls that haven't finished yet. */
+    private final Deque<RealCall> runningSyncCalls = new ArrayDeque<>();
 
 }
